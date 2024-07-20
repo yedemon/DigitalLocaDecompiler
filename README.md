@@ -6,6 +6,12 @@ This project aims to decompile DigitalLoca Ply files (*.lcl) into DigitalLoca Pr
 
 ## Usage
 
+### Pre Step: Ready project
+Before using php projects, execute php package installer.
+```bash
+composer i
+```
+
 ### Step 1: Unpack LCL to LCR
 
 To unpack an `.lcl` file into an `.lcr` file, use the following command:
@@ -32,6 +38,7 @@ The restored project will be stored in the `R:` drive under a directory named af
 
 ## Notes
 
+- **Exe File Format**: As for .exe format, you can search the file for the string 'DIGILOCA'. After locating this string, save all the content starting from 'DIGILOCA' as .lcr file.
 - **Disk Drive Requirement**: Ensure you have an `R:` drive or modify the code to use a different drive.
 - **Compatibility**: Currently, the tool is focused on decompiling older versions of `.lcl` files. The compatibility with newer versions is unknown.
 - **Incomplete Parameter Types**: Some function parameter types are guessed and might be marked as `:UNK`.
