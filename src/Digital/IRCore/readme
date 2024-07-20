@@ -1,0 +1,7 @@
+Theoretically, it should include an AST (Abstract Syntax Tree) directory and Items. 
+However, to simplify the directory hierarchy, AST and Items have not been moved under this structure.
+
+This sits between Script and PCode, encompassing registered objects (Items) as well as the equivalent AST for functions.
+
+Its structure can be generated from either a PcodeBlock or a ScriptBlock. 
+It serves as an abstract intermediate layer.
