@@ -46,6 +46,8 @@ class ScriptWriter {
                     return [$name, $name2];
                 });
 
+                
+
                 // ModelCast[xx].Texture = 123;
                 // => 
                 // ModelCast[xx].Texture = ModelCast(xx);...
@@ -88,24 +90,24 @@ class ScriptWriter {
             }
         }
 
-        $slotsAvailable = $max_script_id - count($script_table) - 3/**const,var*/ + 1;
-        if (isset($script_table[1])) {
+        $slotsAvailable = $max_script_id - count($script_table) - 1/**const+var*/ + 1;
+        if (isset($script_table[0])) {
             $slotsAvailable++;
         } else {
-            $script_table[1] = 'Const';
+            $script_table[0] = 'ConstVar';
         }
-        if (isset($script_table[2])) {
-            $slotsAvailable++;
-        } else {
-            $script_table[2] = 'Var';
-        }
+        // if (isset($script_table[2])) {
+        //     $slotsAvailable++;
+        // } else {
+        //     $script_table[2] = 'Var';
+        // }
 
         // funcs per slot
         $slot_size = ceil($unindexed / $slotsAvailable);
         if ($slot_size > 20) {
             $slot_size = 20;
         }
-        $current_slot = 3;
+        $current_slot = 1;
         $current_slot_fill = 0;
         $current_script = '';
 
@@ -155,8 +157,8 @@ class ScriptWriter {
             $const->tag = 'block';
             $const->nodes = $consts;
 
-            $calllback(1, $script_table[1], $const);
-            $script_name_map[1] = $script_table[1];
+            $calllback(0, $script_table[0], $const);
+            $script_name_map[0] = $script_table[0];
         }
 
         if (!empty($vars)) {
@@ -164,8 +166,8 @@ class ScriptWriter {
             $var->tag = 'block';
             $var->nodes = $vars;
 
-            $calllback(2, $script_table[2], $var);
-            $script_name_map[2] = $script_table[2];
+            $calllback(0, $script_table[0], $var);
+            $script_name_map[0] = $script_table[0];
         }
 
         // cycle through ir's item_procedure.
