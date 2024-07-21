@@ -579,24 +579,48 @@ Class AstFactory {
         if ($node->type2 == self::SysCall) {
             if ($node->name == 'SeekFrameEx') {
                 $block = $node->nodes[0];
-                $literalNodes = [];
+                // $literalNodes = [];
 
                 $literal = $block->nodes[0]->getLiteralValue();
                 $literal2 = $block->nodes[1]->getLiteralValue();
                 $thisPath = 'SeekFrameEx.' . 
                         ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
 
-                $literalNodes[] = $block->nodes[0];
-                $literalNodes[] = $block->nodes[1];
+                // $literalNodes[] = $block->nodes[0];
+                // $literalNodes[] = $block->nodes[1];
 
                 $path = [$thisPath];
 
                 [$alias, $alias2] = $callback($path);
                 if (!empty($alias)) {
-                    $literalNodes[count($literalNodes)-2]->alias = $alias;
+                    // $literalNodes[count($literalNodes)-2]->alias = $alias;
+                    $block->nodes[0]->alias = $alias;
                 }
                 if (!empty($alias2)) {
-                    $literalNodes[count($literalNodes)-1]->alias = $alias2;
+                    // $literalNodes[count($literalNodes)-1]->alias = $alias2;
+                    $block->nodes[1]->alias = $alias2;
+                }
+            }
+        }
+    }
+
+    public static function markGetCrossPointAlias(AstNode $node, $callback) {
+        if ($node->type2 == self::SysCall) {
+            if ($node->name == 'GetCrossPointEx' || $node->name == 'GetCrossPoint') {
+                $block = $node->nodes[0];
+
+                $literal = $block->nodes[7]->getLiteralValue();
+                $literal2 = $block->nodes[8]->getLiteralValue();
+                $thisPath = $node->name .'.' . 
+                    ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
+
+                $path = [$thisPath];
+                [$alias, $alias2] = $callback($path);
+                if (!empty($alias)) {
+                    $block->nodes[0]->alias = $alias;
+                }
+                if (!empty($alias2)) {
+                    $block->nodes[1]->alias = $alias2;
                 }
             }
         }

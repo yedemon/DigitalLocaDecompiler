@@ -530,6 +530,12 @@ Class AstDecoder {
             // SeekFrame special handle
             return static::snippetSeekFrameEx($node, $s);
         }
+        else if ($func == 'GetCrossPoint') {
+            return static::snippetGetCrossPointEx($node, $s, false);
+        }
+        else if ($func == 'GetCrossPointEx') {
+            return static::snippetGetCrossPointEx($node, $s, true);
+        }
 
         // $s has a subelement block as params.
         $s0 = $s[0];
@@ -585,6 +591,57 @@ Class AstDecoder {
                 $text = 'SeekFrameEx('. $param1 .', '. $param2 .')';
             } else {
                 $text = 'SeekFrameEx('. $param0 .':'. $param1 .', '. $param2 .')';
+            }
+        }
+
+        return static::snippet_calls_final($node, $text);
+    }
+
+    /**
+     * @param AstNode $node
+     * @param ScriptSnippet[] $s
+     */
+    private static function snippetGetCrossPointEx($node, $s, $isEx) : ScriptSnippet {
+        $s0 = $s[0];
+        $param0 = $s0->nodes[0]->text;//px
+        $param1 = $s0->nodes[1]->text;//py
+        $param2 = $s0->nodes[2]->text;//pz
+        $param3 = $s0->nodes[3]->text;//nx
+        $param4 = $s0->nodes[4]->text;//ny
+        $param5 = $s0->nodes[5]->text;//nz
+        $param6 = $s0->nodes[6]->text;//dist
+        $param7 = $s0->nodes[7]->text;//score
+        $param8 = $s0->nodes[8]->text;//track
+        $param9 = $s0->nodes[9]->text;//Flag
+        if ($isEx) {
+            $param10 = $s0->nodes[10]->text;//LowerGroup
+            $param11 = $s0->nodes[11]->text;//UpperGroup
+
+            if ($param7 === '0') {
+                $text = 'GetCrossPointEx('. $param0 .', '. $param1 .', '
+                                            . $param2 .', '. $param3 .', '
+                                            . $param4 .', '. $param5 .', '. $param6 .', ' 
+                                            . $param8 .', '. $param9 .', '
+                                            . $param10 .', '. $param11 .')';
+            } else {
+                $text = 'GetCrossPointEx('. $param0 .', '. $param1 .', '
+                                            . $param2 .', '. $param3 .', '
+                                            . $param4 .', '. $param5 .', '. $param6 .', ' 
+                                            . $param7 .':'. $param8 .', '. $param9 .', '
+                                            . $param10 .', '. $param11 .')';
+            }
+        }
+        else {
+            if ($param7 === '0') {
+                $text = 'GetCrossPoint('. $param0 .', '. $param1 .', '
+                                            . $param2 .', '. $param3 .', '
+                                            . $param4 .', '. $param5 .', '. $param6 .', ' 
+                                            . $param8 .', '. $param9 .')';
+            } else {
+                $text = 'GetCrossPoint('. $param0 .', '. $param1 .', '
+                                            . $param2 .', '. $param3 .', '
+                                            . $param4 .', '. $param5 .', '. $param6 .', ' 
+                                            . $param7 .':'. $param8 .', '. $param9 .')';
             }
         }
 

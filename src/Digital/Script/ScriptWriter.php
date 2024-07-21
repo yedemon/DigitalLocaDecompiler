@@ -46,7 +46,11 @@ class ScriptWriter {
                     return [$name, $name2];
                 });
 
-                
+                AstFactory::markGetCrossPointAlias($node,
+                function($path) use ($loca) {
+                    [$name, $name2] = $loca->searchScoreLabel($path);
+                    return [$name, $name2];
+                });
 
                 // ModelCast[xx].Texture = 123;
                 // => 
