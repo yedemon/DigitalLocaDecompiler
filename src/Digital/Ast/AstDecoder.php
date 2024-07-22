@@ -539,6 +539,9 @@ Class AstDecoder {
         else if ($func == 'CollisionCheck') {
             return static::snippetCollisionCheckEx($node, $s, false);
         }
+        else if ($func == 'BreakLoopEx') {
+            return static::snippetBreakLoopEx($node, $s);
+        }
 
         // $s has a subelement block as params.
         $s0 = $s[0];
@@ -672,6 +675,33 @@ Class AstDecoder {
             $text = 'CollisionCheck('. $p1 .', '. $p2 .')';
         }
         
+        return static::snippet_calls_final($node, $text);
+    }
+
+    /**
+     * @param AstNode $node
+     * @param ScriptSnippet[] $s
+     */
+    private static function snippetBreakLoopEx($node, $s) : ScriptSnippet {
+        $s0 = $s[0];
+        $param0 = $s0->nodes[0]->text;
+        $param1 = $s0->nodes[1]->text;
+        if ($param1 == 'True') {
+            // BreakLoop..
+            if ($param0 === '0') {
+                $text = 'BreakLoop';
+            } else {         
+                $text = 'BreakLoop('. $param0 .')';
+            }
+        }
+        else {
+            if ($param0 === '0') {
+                $text = 'BreakLoopEx('. $param1 .')';
+            } else {
+                $text = 'BreakLoopEx('. $param0 .', '. $param1 .')';
+            }
+        }
+
         return static::snippet_calls_final($node, $text);
     }
 

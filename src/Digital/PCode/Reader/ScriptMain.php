@@ -40,7 +40,7 @@ class ScriptMain {
     const AVIFileOpen = 0x59;
 
     /** BreakLoop */
-    const BreakLoop = 0x60;
+    const BreakLoopEx = 0x60;
 
     /** Seekframe */
     const SeekFrameEx = 0x61;
@@ -113,12 +113,11 @@ class ScriptMain {
                 $node = ScriptAVIFileOpen::digest($root, $bytes, $offset);
                 break;
 
-            case self::BreakLoop:
-                // $node->op = 'BreakLoop';
+            case self::BreakLoopEx:
                 $params = [];
                 $params[] = EvalSystem::digest($root, $bytes, $offset);
                 $params[] = EvalSystem::digest($root, $bytes, $offset);
-                $node = AstFactory::syscallNode('BreakLoop', $params, self::BreakLoop);
+                $node = AstFactory::syscallNode('BreakLoopEx', $params, self::BreakLoopEx);
                 break;
 
             case self::SeekFrameEx:

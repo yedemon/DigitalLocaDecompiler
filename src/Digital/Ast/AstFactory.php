@@ -662,6 +662,30 @@ Class AstFactory {
         }
     }
 
+    public static function markBreakLoopExAlias(AstNode $node, $callback) {
+        if ($node->type2 == self::SysCall) {
+            if ($node->name == 'BreakLoopEx') {
+                $block = $node->nodes[0];
+
+                $literal = $block->nodes[0]->getLiteralValue();
+                if ($literal === null) return;
+
+                if ($literal === 0) {
+                    $block->nodes[0]->alias = '0';
+                    return ;
+                }
+
+                $thisPath = $node->name .'.' . $literal . ':?';
+
+                $path = [$thisPath];
+                [$alias, $alias2] = $callback($path);
+                if (!empty($alias)) {
+                    $block->nodes[0]->alias = $alias;
+                }
+            }
+        }
+    }
+
     public static function markAssignModelCastTexture(AstNode $node, $callback) {
         if ($node->type2 == self::Assign) {
             if ($node->nodes[0]->type2 == self::Proper &&
