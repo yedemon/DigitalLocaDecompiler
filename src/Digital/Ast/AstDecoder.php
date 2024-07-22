@@ -525,7 +525,7 @@ Class AstDecoder {
      * @param ScriptSnippet[] $s
      */
     private static function snippetCalls($node, $s) : ScriptSnippet {
-        $func = $node->name;
+        $func = str_u2j($node->name);
         if ($func == 'SeekFrameEx') {
             // SeekFrame special handle
             return static::snippetSeekFrameEx($node, $s);
