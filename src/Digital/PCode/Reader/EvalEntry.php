@@ -15,10 +15,10 @@ use Digital\PCode\PCodeReader;
 class EvalEntry {
 
     /** FileRead */
-    const FileRead = 0x30;
+    const FileReadOpen = 0x30;
 
     /** FileWrite */
-    const FileWrite = 0x31;
+    const FileWriteOpen = 0x31;
 
     /** FileReadClose */
     const FileReadClose = 0x32;
@@ -50,17 +50,17 @@ class EvalEntry {
         $cmd = d_u1($bytes, $offset); //upk0('C', substr($bytes, $offset++, 1));
         
         switch($cmd) {
-            case self::FileRead:
+            case self::FileReadOpen:
                 // $node->op = 'FileReadClose';
                 // $node->nodes[] = EvalSystem::digest($root, $bytes, $offset);
                 $cnode = EvalSystem::digest($root, $bytes, $offset);
-                $node = AstFactory::syscallNode('FileRead', [$cnode], $cmd);
+                $node = AstFactory::syscallNode('FileReadOpen', [$cnode], $cmd);
                 break;
-            case self::FileWrite:
+            case self::FileWriteOpen:
                 // $node->op = 'FileWriteClose';
                 // $node->nodes[] = EvalSystem::digest($root, $bytes, $offset);
                 $cnode = EvalSystem::digest($root, $bytes, $offset);
-                $node = AstFactory::syscallNode('FileWrite', [$cnode], $cmd);
+                $node = AstFactory::syscallNode('FileWriteOpen', [$cnode], $cmd);
                 break;
             case self::FileReadClose:
                 // $node->op = 'FileReadClose';
