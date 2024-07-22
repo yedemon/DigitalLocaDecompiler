@@ -7,6 +7,7 @@ namespace Digital\PCode\Reader;
 use Digital\Ast\AstFactory;
 use Digital\Ast\AstNode;
 use Digital\Ast\AstRoot;
+use Digital\PCode\PCodeReader;
 
 class CastCameraCast {
 
@@ -23,7 +24,10 @@ class CastCameraCast {
             // ??
         }
 
-        $obj_idxr_prop = AstFactory::propNode($obj_idxr, $prop, '');
+        $propname = ScriptCameraCast::names[$prop]??'';
+        $propValType = ScriptCameraCast::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
+
+        $obj_idxr_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
 
         return $obj_idxr_prop;
     }

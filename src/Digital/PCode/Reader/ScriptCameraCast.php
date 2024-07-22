@@ -12,9 +12,33 @@ use Digital\PCode\PCodeReader;
 class ScriptCameraCast {
 
     const names = [
+        0x2A => 'Angle',
+        0x23 => 'BackClip',
+        0x29 => 'Fog.Back',
+        0x25 => 'Fog.Color.R',
+        0x26 => 'Fog.Color.G',
+        0x27 => 'Fog.Color.B',
+        0x24 => 'Fog.Enabled',
+        0x28 => 'Fog.Fore',
+        0x22 => 'FrontClip',
+        0x12 => 'Name',
+        0x10 => 'Tag',
+        0x21 => 'ZoomFactor',
     ];
 
     const valTypes = [
+        0x2A => PCodeReader::VAL_FLOAT,
+        0x23 => PCodeReader::VAL_FLOAT,
+        0x29 => PCodeReader::VAL_FLOAT,
+        0x25 => PCodeReader::VAL_INT,
+        0x26 => PCodeReader::VAL_INT,
+        0x27 => PCodeReader::VAL_INT,
+        0x24 => PCodeReader::VAL_BOOL,
+        0x28 => PCodeReader::VAL_INT,
+        0x22 => PCodeReader::VAL_FLOAT,
+        0x12 => PCodeReader::VAL_STRING,
+        0x10 => PCodeReader::VAL_INT,
+        0x21 => PCodeReader::VAL_FLOAT,
     ];
 
     public static function digest(AstRoot $root, $bytes, &$offset) : AstNode {
@@ -42,7 +66,7 @@ class ScriptCameraCast {
         switch ( $prop )
         {
             case 0x10:
-            case 0x11:
+            // case 0x11:
             case 0x20:
             case 0x21:
             case 0x22:
