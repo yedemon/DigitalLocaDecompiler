@@ -254,9 +254,7 @@ class ScriptTrackProp {
         }
 
         $propname = self::names[$prop]??''; 
-            //isset(self::names[$prop]) ? self::names[$prop] : '';
-        $propValType = self::valTypes[$prop]??'';
-            //isset(self::valTypes[$prop]) ? self::valTypes[$prop] : '';
+        $propValType = self::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
 
         $obj_idxr_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
         $node = AstFactory::assignNode($obj_idxr_prop, $node2);

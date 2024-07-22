@@ -7,6 +7,7 @@ namespace Digital\PCode\Reader;
 use Digital\Ast\AstFactory;
 use Digital\Ast\AstNode;
 use Digital\Ast\AstRoot;
+use Digital\PCode\PCodeReader;
 
 class CastModelCast {
 
@@ -29,7 +30,7 @@ class CastModelCast {
             $prop0 = d_u1($bytes, $offset);
 
             $prop0name = ScriptModelCast::names[$prop0]??''; 
-            $prop0ValType = ScriptModelCast::valTypes[$prop0]??'';
+            $prop0ValType = ScriptModelCast::valTypes[$prop0]??PCodeReader::VAL_UNKNOWN;
 
             $obj_group_prop = AstFactory::propNode($obj_idxr_group_idxr, $prop0, $prop0name, $prop0ValType);
             $node = $obj_group_prop;
@@ -42,7 +43,7 @@ class CastModelCast {
             // }
         } else {
             $propname = ScriptModelCast::names[$prop]??''; 
-            $propValType = ScriptModelCast::valTypes[$prop]??'';
+            $propValType = ScriptModelCast::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
 
             $obj_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
             $node = $obj_prop;

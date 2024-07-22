@@ -168,7 +168,7 @@ class EvalEntry {
         $prop = d_u1($bytes, $offset);
 
         $propname = ScriptJoyStick::names[$prop]??''; 
-        $propValType = ScriptJoyStick::valTypes[$prop]??'';
+        $propValType = ScriptJoyStick::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
 
         switch($prop) {
             case 0x11:

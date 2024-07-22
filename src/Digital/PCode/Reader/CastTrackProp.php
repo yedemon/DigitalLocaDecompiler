@@ -7,6 +7,7 @@ namespace Digital\PCode\Reader;
 use Digital\Ast\AstFactory;
 use Digital\Ast\AstNode;
 use Digital\Ast\AstRoot;
+use Digital\PCode\PCodeReader;
 
 class CastTrackProp {
 
@@ -48,7 +49,7 @@ class CastTrackProp {
         }
 
         $propname = ScriptTrackProp::names[$prop]??''; 
-        $propValType = ScriptTrackProp::valTypes[$prop]??'';
+        $propValType = ScriptTrackProp::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
 
         $obj_idxr_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
 

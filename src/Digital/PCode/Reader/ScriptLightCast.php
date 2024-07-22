@@ -36,7 +36,7 @@ class ScriptLightCast {
             $node2 = EvalSystem::digest($root, $bytes, $offset);
 
             $propname = self::names[$prop]??'';
-            $propValType = self::valTypes[$prop]??'';
+            $propValType = self::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
 
             $obj_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
             $node = AstFactory::assignNode($obj_prop, $node2);

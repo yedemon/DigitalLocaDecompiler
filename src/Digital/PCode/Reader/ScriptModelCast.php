@@ -128,7 +128,7 @@ class ScriptModelCast {
                 // $node = AstFactory::assignNode($obj_group_index, $node2);
 
                 $prop0name = self::names[$prop0]??''; 
-                $prop0ValType = self::valTypes[$prop0]??'';
+                $prop0ValType = self::valTypes[$prop0]??PCodeReader::VAL_UNKNOWN;
 
                 $obj_group_prop = AstFactory::propNode($obj_idxr_group_idxr, $prop0, $prop0name, $prop0ValType);
                 $node = AstFactory::assignNode($obj_group_prop, $node2);
@@ -144,7 +144,7 @@ class ScriptModelCast {
                 $node2 = EvalSystem::digest($root, $bytes, $offset);
 
                 $propname = self::names[$prop]??''; 
-                $propValType = self::valTypes[$prop]??'';
+                $propValType = self::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
                 
                 $obj_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
                 $node = AstFactory::assignNode($obj_prop, $node2);

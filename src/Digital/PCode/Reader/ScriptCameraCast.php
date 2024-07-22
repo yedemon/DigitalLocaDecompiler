@@ -7,8 +7,15 @@ namespace Digital\PCode\Reader;
 use Digital\Ast\AstFactory;
 use Digital\Ast\AstNode;
 use Digital\Ast\AstRoot;
+use Digital\PCode\PCodeReader;
 
 class ScriptCameraCast {
+
+    const names = [
+    ];
+
+    const valTypes = [
+    ];
 
     public static function digest(AstRoot $root, $bytes, &$offset) : AstNode {
         $obj = AstFactory::CameraCastNode();
@@ -22,7 +29,10 @@ class ScriptCameraCast {
         if ($prop != 0x11) {
             $node2 = EvalSystem::digest($root, $bytes, $offset);
 
-            $obj_prop = AstFactory::propNode($obj_idxr, $prop, '');
+            $propname = self::names[$prop]??'';
+            $propValType = self::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
+
+            $obj_prop = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
             $node = AstFactory::assignNode($obj_prop, $node2);
         } else {
             //Reset
