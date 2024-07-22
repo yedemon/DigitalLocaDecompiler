@@ -90,6 +90,7 @@ class ScriptWriter {
         $script_table = [];
         $max_script_id = 0;
         $unindexed = 0;
+        $first_usercall_script_id = -1;
 
         foreach($ircore->item_procedures as $procedure) {
             if ($procedure->isOnEvent()) {
@@ -97,6 +98,23 @@ class ScriptWriter {
                 $scriptName = $procedure->getScriptName();
 
                 $script_table[$scriptId] = $scriptName;
+
+                // have to check this function whether contains a usercall..
+                // the slot should ends here.
+                $hasUserCall = AstRooT::walk_procedure($procedure, function($pnode, AstNode $node, $results) {
+                    if ($results == null) return false;
+
+                    for ($i = 0; $i < count($results); $i++) {
+                        if ($results[$i] === true) return true;
+                    }
+                    if ($node->type2 == AstFactory::UserCall) {
+                        return true;
+                    }
+                    return false;
+                });
+                if ($hasUserCall && $first_usercall_script_id === -1) {
+                    $first_usercall_script_id = $scriptId;
+                }
 
                 if ($scriptId > $max_script_id) {
                     $max_script_id = $scriptId;
@@ -107,6 +125,15 @@ class ScriptWriter {
         }
 
         $slotsAvailable = $max_script_id - count($script_table) - 1/**const+var*/ + 1;
+
+        // can't handle this... right the moment..
+        if ($first_usercall_script_id == 0) {
+            $first_usercall_script_id = $slotsAvailable;
+        }
+
+        if ($slotsAvailable > $first_usercall_script_id) {
+            $slotsAvailable = $first_usercall_script_id;
+        }
         if (isset($script_table[0])) {
             $slotsAvailable++;
         } else {
