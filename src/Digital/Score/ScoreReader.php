@@ -25,8 +25,9 @@ Class ScoreReader {
 
                 case 0x20:
                     // print(dechex(ftell($fp)).PHP_EOL);
-                    $tracks[] = static::readTrack($fp); break;
-
+                    $track = static::readTrack($fp);
+                    $tracks[] = $track;
+                    break;
                 case 0x10:
                     $score['trackNum'] = freadu4($fp); break;
 
@@ -63,7 +64,7 @@ Class ScoreReader {
                 case 0x11:
                     $track['castType'] = fread4($fp); break;
                 case 0x12:
-                    $track[0x12] = fread4($fp); break;
+                    $track['resId'] = fread4($fp); break;//track Id. or castId..
 
                 case 0x20:
                     $track['_3dLocation'] = static::read3DLocation($fp); break;
@@ -110,7 +111,6 @@ Class ScoreReader {
 
                 default:
                     throw new Exception('track flag unknown '.dechex($flag));
-                    break;
             }
         }
 

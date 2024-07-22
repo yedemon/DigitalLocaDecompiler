@@ -48,7 +48,7 @@ class ScriptWriter {
 
                 AstFactory::markGetCrossPointAlias($node,
                 function($path) use ($loca) {
-                    [$name, $name2] = $loca->searchScoreLabel($path);
+                    [$name, $name2] = $loca->searchScoreTrack($path);
                     return [$name, $name2];
                 });
 

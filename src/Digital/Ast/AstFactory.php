@@ -617,10 +617,10 @@ Class AstFactory {
                 $path = [$thisPath];
                 [$alias, $alias2] = $callback($path);
                 if (!empty($alias)) {
-                    $block->nodes[0]->alias = $alias;
+                    $block->nodes[7]->alias = $alias;
                 }
                 if (!empty($alias2)) {
-                    $block->nodes[1]->alias = $alias2;
+                    $block->nodes[8]->alias = $alias2;
                 }
             }
         }
