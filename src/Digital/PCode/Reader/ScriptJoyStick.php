@@ -13,13 +13,43 @@ use Exception;
 class ScriptJoyStick {
 
     const names = [
-        18 => 'DigitalX',
-        19 => 'DigitalY',
+        0x11 => 'Enabled',
+        0x12 => 'DigitalX',
+        0x13 => 'DigitalY',
+        0x14 => 'DigitalZ',
+        0x1A => 'DigitalR',
+        0x1B => 'DigitalU',
+        0x1C => 'DigitalV',
+
+        0x15 => 'AnalogXPos',
+        0x16 => 'AnalogYPos',
+        0x17 => 'AnalogZPos',
+        0x1D => 'AnalogRPos',
+        0x1E => 'AnalogUPos',
+        0x1F => 'AnalogVPos',
+
+        0x20 => 'POV',
+        0x18 => 'ButtonCount',
     ];
 
     const valTypes = [
-        18 => PCodeReader::VAL_INT,
-        19 => PCodeReader::VAL_INT,
+        0x11 => PCodeReader::VAL_BOOL,
+        0x12 => PCodeReader::VAL_INT,
+        0x13 => PCodeReader::VAL_INT,
+        0x14 => PCodeReader::VAL_INT,
+        0x1A => PCodeReader::VAL_INT,
+        0x1B => PCodeReader::VAL_INT,
+        0x1C => PCodeReader::VAL_INT,
+
+        0x15 => PCodeReader::VAL_INT,
+        0x16 => PCodeReader::VAL_INT,
+        0x17 => PCodeReader::VAL_INT,
+        0x1D => PCodeReader::VAL_INT,
+        0x1E => PCodeReader::VAL_INT,
+        0x1F => PCodeReader::VAL_INT,
+
+        0x20 => PCodeReader::VAL_INT,
+        0x18 => PCodeReader::VAL_INT,
     ];
 
     public static function getJoyStickIndexAlias(AstNode $obj_index) : string {
