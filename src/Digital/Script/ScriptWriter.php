@@ -52,6 +52,12 @@ class ScriptWriter {
                     return [$name, $name2];
                 });
 
+                AstFactory::markCollisionCheckAlias($node,
+                function($path) use ($loca) {
+                    [$name, $name2] = $loca->searchScoreTrack($path);
+                    return [$name, $name2];
+                });
+
                 // ModelCast[xx].Texture = 123;
                 // => 
                 // ModelCast[xx].Texture = ModelCast(xx);...

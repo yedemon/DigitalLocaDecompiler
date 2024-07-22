@@ -536,6 +536,9 @@ Class AstDecoder {
         else if ($func == 'GetCrossPointEx') {
             return static::snippetGetCrossPointEx($node, $s, true);
         }
+        else if ($func == 'CollisionCheck') {
+            return static::snippetCollisionCheckEx($node, $s, false);
+        }
 
         // $s has a subelement block as params.
         $s0 = $s[0];
@@ -645,6 +648,30 @@ Class AstDecoder {
             }
         }
 
+        return static::snippet_calls_final($node, $text);
+    }
+
+    private static function snippetCollisionCheckEx($node, $s, $isEx) : ScriptSnippet {
+        $s0 = $s[0];
+        $param0 = $s0->nodes[0]->text;//ScoreA
+        $param1 = $s0->nodes[1]->text;//TrackA
+        $param2 = $s0->nodes[2]->text;//ScoreB
+        $param3 = $s0->nodes[3]->text;//TrackB
+
+        if (!$isEx) {
+            if ($param0 === '0') {
+                $p1 = $param1;
+            } else {
+                $p1 = $param0 .':'. $param1;
+            }
+            if ($param2 === '0') {
+                $p2 = $param3;
+            } else {
+                $p2 = $param2 .':'. $param3;
+            }
+            $text = 'CollisionCheck('. $p1 .', '. $p2 .')';
+        }
+        
         return static::snippet_calls_final($node, $text);
     }
 

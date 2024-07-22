@@ -626,6 +626,42 @@ Class AstFactory {
         }
     }
 
+    public static function markCollisionCheckAlias(AstNode $node, $callback) {
+        if ($node->type2 == self::SysCall) {
+            if ($node->name == 'CollisionCheck' || $node->name == 'CollisionCheckEx') {
+                $block = $node->nodes[0];
+
+                $literal = $block->nodes[0]->getLiteralValue();
+                $literal2 = $block->nodes[1]->getLiteralValue();
+                $thisPath = $node->name .'.' . 
+                    ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
+
+                $path = [$thisPath];
+                [$alias, $alias2] = $callback($path);
+                if (!empty($alias)) {
+                    $block->nodes[0]->alias = $alias;
+                }
+                if (!empty($alias2)) {
+                    $block->nodes[1]->alias = $alias2;
+                }
+
+                $literal = $block->nodes[2]->getLiteralValue();
+                $literal2 = $block->nodes[3]->getLiteralValue();
+                $thisPath = $node->name .'.' . 
+                    ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
+
+                $path = [$thisPath];
+                [$alias, $alias2] = $callback($path);
+                if (!empty($alias)) {
+                    $block->nodes[2]->alias = $alias;
+                }
+                if (!empty($alias2)) {
+                    $block->nodes[3]->alias = $alias2;
+                }
+            }
+        }
+    }
+
     public static function markAssignModelCastTexture(AstNode $node, $callback) {
         if ($node->type2 == self::Assign) {
             if ($node->nodes[0]->type2 == self::Proper &&
