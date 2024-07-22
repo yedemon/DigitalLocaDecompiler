@@ -73,9 +73,18 @@ class ScriptWriter {
                     return $name;
                 });
 
-                // handle onEvent keys'
+                // WaveAudio(123);
+                // => 
+                // WaveAudio(XX);...
+                AstFactory::markWaveAudioAlias($node,
+                function ($waveId) use ($loca) {
+                    $name = $loca->searchWave($waveId);
+                    return $name;
+                });
 
                 // handle GetKeyEvent keys'
+
+                // handle onEvent keys'
             });
         }
     }

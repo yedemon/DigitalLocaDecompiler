@@ -118,6 +118,17 @@ Class DigiLocaResource {
         return $resource['name'];
     }
 
+    public function searchWave($waveId) {
+        $scores = $this->casts;
+
+        $t = self::CastCateNames[CAST_WAVE];
+        if (!isset($scores[$t][$waveId])) return '';
+
+        $resource = $scores[$t][$waveId];
+
+        return $resource['name'];
+    }
+
     // using [xxx.x:x] to search scores
     public function searchScoreTrack($paths) {
         $name = null;

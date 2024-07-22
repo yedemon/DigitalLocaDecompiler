@@ -708,7 +708,22 @@ Class AstFactory {
                 }
             }
         }
-        
+    }
+
+    public static function markWaveAudioAlias(AstNode $node, $callback) {
+        if ($node->type2 == self::SysCall) {
+            if ($node->name == 'WaveAudio') {
+                $block = $node->nodes[0];
+
+                $literal = $block->nodes[0]->getLiteralValue();
+                if ($literal === null) return;
+
+                $alias = $callback($literal);
+                if (!empty($alias)) {
+                    $block->nodes[0]->alias = $alias;
+                }
+            }
+        }
     }
 
     /**
