@@ -7,6 +7,7 @@ namespace Digital\PCode\Reader;
 use Digital\Ast\AstFactory;
 use Digital\Ast\AstNode;
 use Digital\Ast\AstRoot;
+use Digital\PCode\PCodeReader;
 use Exception;
 
 /**
@@ -118,40 +119,40 @@ class EvalCommon {
                 if ($extra == 0) {
                     $node2 = EvalSystem::digest($root, $bytes, $offset);
 
-                    $obj_prop = AstFactory::propNode($obj, 0x01, '');
+                    $obj_prop = AstFactory::propNode($obj, 0x01, 'Filter', PCodeReader::VAL_STRING);
                     $node = AstFactory::assignNode($obj_prop, $node2);
                 } else {
-                    $node = AstFactory::propNode($obj, 0x01, '');
+                    $node = AstFactory::propNode($obj, 0x01, 'Filter', PCodeReader::VAL_STRING);
                 }
                 break;
             case 0x02:
                 if ($extra == 0) {
                     $node2 = EvalSystem::digest($root, $bytes, $offset);
 
-                    $obj_prop = AstFactory::propNode($obj, 0x02, '');
+                    $obj_prop = AstFactory::propNode($obj, 0x02, 'FileName', PCodeReader::VAL_STRING);
                     $node = AstFactory::assignNode($obj_prop, $node2);
                 } else {
-                    $node = AstFactory::propNode($obj, 0x02, '');
+                    $node = AstFactory::propNode($obj, 0x02, 'FileName', PCodeReader::VAL_STRING);
                 }
                 break;
             case 0x03:
                 if ($extra == 0) {
                     $node2 = EvalSystem::digest($root, $bytes, $offset);
 
-                    $obj_prop = AstFactory::propNode($obj, 0x03, '');
+                    $obj_prop = AstFactory::propNode($obj, 0x03, 'Title', PCodeReader::VAL_STRING);
                     $node = AstFactory::assignNode($obj_prop, $node2);
                 } else {
-                    $node = AstFactory::propNode($obj, 0x03, '');
+                    $node = AstFactory::propNode($obj, 0x03, 'Title', PCodeReader::VAL_STRING);
                 }
                 break;
             case 0x04:
                 if ($extra == 0) {
                     $node2 = EvalSystem::digest($root, $bytes, $offset);
 
-                    $obj_prop = AstFactory::propNode($obj, 0x04, '');
+                    $obj_prop = AstFactory::propNode($obj, 0x04, 'FileExt', PCodeReader::VAL_STRING);
                     $node = AstFactory::assignNode($obj_prop, $node2);
                 } else {
-                    $node = AstFactory::propNode($obj, 0x04, '');
+                    $node = AstFactory::propNode($obj, 0x04, 'FileExt', PCodeReader::VAL_STRING);
                 }
                 break;
         }
