@@ -124,46 +124,39 @@ class ScriptWriter {
             }
         }
 
-        $slotsAvailable = $max_script_id - count($script_table) - 1/**const+var*/ + 1;
-
-        // can't handle this... right the moment..
-        if ($first_usercall_script_id == 0) {
-            $first_usercall_script_id = $slotsAvailable;
-        }
-
-        if ($slotsAvailable > $first_usercall_script_id) {
-            $slotsAvailable = $first_usercall_script_id;
-        }
-        if (isset($script_table[0])) {
-            $slotsAvailable++;
-        } else {
+        if (!isset($script_table[0])) {
             $script_table[0] = 'ConstVar';
         }
-        // if (isset($script_table[2])) {
-        //     $slotsAvailable++;
-        // } else {
-        //     $script_table[2] = 'Var';
-        // }
+
+        if ($first_usercall_script_id === -1) {
+            $slotsAvailable = $max_script_id;
+        } else {
+            $slotsAvailable = $first_usercall_script_id;
+        }
+
+        if ($slotsAvailable >= 1) {
+            $slotsAvailable --;
+            $current_slot = 1;
+        } else {
+            $current_slot = 0;
+        }
 
         // funcs per slot
         $slot_size = ceil($unindexed / $slotsAvailable);
-        if ($slot_size > 20) {
-            $slot_size = 20;
-        }
-        $current_slot = 1;
+
         $current_slot_fill = 0;
         $current_script = '';
-
-        while (isset($script_table[$current_slot])) {
-            $current_slot++;
-        }
 
         // 2. fill unnamed procedures into slots, assign scriptname
         foreach($ircore->item_procedures as $procedure) {
             if (!$procedure->isOnEvent()) {
                 if ($current_slot_fill == 0) {
-                    $current_script = $procedure->name;
-                    $script_table[$current_slot] = $current_script;
+                    if (!isset($script_table[$current_slot])) {
+                        $current_script = $procedure->name;
+                        $script_table[$current_slot] = $current_script;
+                    } else {
+                        $current_script = $script_table[$current_slot];
+                    }
                 }
 
                 $procedure->setScriptName($current_script);
@@ -171,10 +164,9 @@ class ScriptWriter {
 
                 $current_slot_fill ++;
                 if ($current_slot_fill >= $slot_size) {
-                    while (isset($script_table[$current_slot])) {
-                        $current_slot++;
-                    }
-
+                    // while (isset($script_table[$current_slot])) {
+                    $current_slot++;
+                    // }
                     $current_slot_fill = 0;
                 }
             }
@@ -248,7 +240,8 @@ class ScriptWriter {
             }
             $calllback($scriptId, $scriptName, $func);
             
-            $script_name_map[$scriptId] = $scriptName;
+            if (!isset($script_name_map[$scriptId]))
+                $script_name_map[$scriptId] = $scriptName;
         }
 
         ksort($script_name_map);
