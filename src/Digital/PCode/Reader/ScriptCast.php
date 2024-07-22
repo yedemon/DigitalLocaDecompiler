@@ -25,6 +25,9 @@ class ScriptCast {
     /** ModelCast */
     const ModelCast = 0x80;
 
+    /** wv */
+    const WaveCast = 0x84;
+
     // camera cast....
     const CameraCast = 0x87;
 
@@ -46,6 +49,10 @@ class ScriptCast {
 
             case self::ModelCast:
                 $node = CastModelCast::digest($root, $bytes, $offset);
+                break;
+
+            case self::WaveCast:
+                $node = CastWaveCast::digest($root, $bytes, $offset);
                 break;
 
             case self::CameraCast:
