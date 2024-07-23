@@ -84,6 +84,9 @@ class EvalMain1 {
     /** GetClientCursorPos */
     const GCCP = 0x55;
 
+    /** SetClientCursorPos */
+    const SCCP = 0x57;
+
     /** Randomize */
     const Randomize = 0x70;
 
@@ -205,6 +208,10 @@ class EvalMain1 {
             
             case self::GCCP:
                 $node = static::digestGCCP($root, $bytes, $offset);
+                break;
+
+            case self::SCCP:
+                $node = static::digestSCCP($root, $bytes, $offset);
                 break;
 
             case self::Randomize:
@@ -497,6 +504,17 @@ class EvalMain1 {
         $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //x
         $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //y
         $node = AstFactory::syscallNode('GetClientCursorPos', $params, self::GCCP);
+
+        return $node;
+    }
+
+    private static function digestSCCP(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+        // $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //x
+        // $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //y
+        $params[] = EvalSystem::digest($root, $bytes, $offset);  //x
+        $params[] = EvalSystem::digest($root, $bytes, $offset);  //y
+        $node = AstFactory::syscallNode('SetClientCursorPos', $params, self::SCCP);
 
         return $node;
     }
