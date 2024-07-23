@@ -50,6 +50,18 @@ class EvalMain1 {
 
     /** DEC */
     const DEC = 0x21;
+    
+    /** FileReadOpen */
+    const FileReadOpen = 0x30;
+
+    /** FileWriteOpen */
+    const FileWriteOpen = 0x31;
+
+    /** FileReadClose */
+    const FileReadClose = 0x32;
+
+    /** FileWriteClose */
+    const FileWriteClose = 0x33;
 
     /** FileRead */
     const FileRead = 0x34;
@@ -141,6 +153,21 @@ class EvalMain1 {
             
             case self::DEC:
                 $node = static::digestDec($root, $bytes, $offset);
+                break;
+
+            case self::FileReadOpen:
+                $cnode = EvalSystem::digest($root, $bytes, $offset);
+                $node = AstFactory::syscallNode('FileReadOpen', [$cnode], $cmd);
+                break;
+            case self::FileWriteOpen:
+                $cnode = EvalSystem::digest($root, $bytes, $offset);
+                $node = AstFactory::syscallNode('FileWriteOpen', [$cnode], $cmd);
+                break;
+            case self::FileReadClose:
+                $node = AstFactory::syscallNode('FileReadClose', [], $cmd);
+                break;
+            case self::FileWriteClose:
+                $node = AstFactory::syscallNode('FileWriteClose', [], $cmd);
                 break;
 
             case self::FileRead:
