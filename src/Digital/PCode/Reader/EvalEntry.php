@@ -14,10 +14,10 @@ use Digital\PCode\PCodeReader;
  */
 class EvalEntry {
 
-    /** FileRead */
+    /** FileReadOpen */
     const FileReadOpen = 0x30;
 
-    /** FileWrite */
+    /** FileWriteOpen */
     const FileWriteOpen = 0x31;
 
     /** FileReadClose */
