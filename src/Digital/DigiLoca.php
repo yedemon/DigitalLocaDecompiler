@@ -339,7 +339,7 @@ Class DigiLoca extends DigiLocaResource {
      */
     public function playWithPcode(string $pcode_file) {
         $procedureName = '';
-        // $procedureName = 'LIGHT_SET';
+        // $procedureName = '関節制御.ENTERFRAME';
         $print_all = false;
         if (empty($procedureName)) {
             $print_all = true;
@@ -350,7 +350,7 @@ Class DigiLoca extends DigiLocaResource {
             if (empty($procedureName)) {
                 $should_digest = true;
             } else {
-                $should_digest = strcasecmp($root->getName(), $procedureName) == 0;
+                $should_digest = strcasecmp($root->getScriptName().'.'.$root->getName(), $procedureName) == 0;
             }
         };
         
@@ -380,7 +380,7 @@ Class DigiLoca extends DigiLocaResource {
 
         $debugger->on_final_iterating = function (AstRoot $root) use ($pcode_offset) {
             print($root->getName().' at '.
-                cmdhex($root->getBaseOffset()+$pcode_offset).'-');
+                cmdhex($root->getBaseOffset()+$pcode_offset).'-'.PHP_EOL);
             $root->printNodesXML();
         };
 
