@@ -321,8 +321,9 @@ class ScriptWriter {
             $const->tag = 'block';
             $const->nodes = $consts;
 
-            $calllback(0, $script_table[0], $const);
-            $script_name_map[0] = $script_table[0];
+            $scriptName = str_u2j($script_table[0]);
+            $calllback(0, $scriptName, $const);
+            $script_name_map[0] = $scriptName;
         }
 
         if (!empty($vars)) {
@@ -330,8 +331,9 @@ class ScriptWriter {
             $var->tag = 'block';
             $var->nodes = $vars;
 
-            $calllback(0, $script_table[0], $var);
-            $script_name_map[0] = $script_table[0];
+            $scriptName = str_u2j($script_table[0]);
+            $calllback(0, $scriptName, $var);
+            $script_name_map[0] = $scriptName;
         }
 
         // cycle through ir's item_procedure.
