@@ -22,6 +22,9 @@ class ScriptCast {
     /** GetCrossPoint */
     const GetCrossPoint = 0x72;
 
+    /** CollisionCheckEx */
+    const CollisionCheckEx = 0x76;
+
     /** ModelCast */
     const ModelCast = 0x80;
 
@@ -45,6 +48,10 @@ class ScriptCast {
 
             case self::GetCrossPoint:
                 $node = static::digestGetCrossPoint(0x72, $root, $bytes, $offset);
+                break;
+
+            case self::CollisionCheckEx:
+                $node = static::digestCollisionCheckEx($root, $bytes, $offset);
                 break;
 
             case self::ModelCast:
@@ -105,6 +112,21 @@ class ScriptCast {
         $params[] = EvalSystem::digest($root, $bytes, $offset);
 
         $node = AstFactory::syscallNode('CollisionCheck', $params, self::CollisionCheck);
+        return $node;
+    }
+
+    private static function digestCollisionCheckEx(AstRoot $root, $bytes, &$offset) {
+        // $node->op = 'CollisionCheck';
+        $params = [];
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = EvalSystem::digest($root, $bytes, $offset);
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset);
+
+        $node = AstFactory::syscallNode('CollisionCheckEx', $params, self::CollisionCheckEx);
         return $node;
     }
 }
