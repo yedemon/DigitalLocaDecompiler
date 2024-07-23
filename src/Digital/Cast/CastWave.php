@@ -27,6 +27,7 @@ Class CastWave {
     }
 
     private static function readWaveBody($fp) {
+        $body = false;
         $loop = true;
         while ($loop) {
             $flag = freadu1($fp);

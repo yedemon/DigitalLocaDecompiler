@@ -20,6 +20,7 @@ Class CastMIDI {
     }
 
     private static function read477744($fp) {
+        $res = false;
         $loop = true;
         $f3C = 0;
         while ($loop) {
