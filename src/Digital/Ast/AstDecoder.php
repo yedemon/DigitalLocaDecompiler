@@ -539,6 +539,9 @@ Class AstDecoder {
         else if ($func == 'CollisionCheck') {
             return static::snippetCollisionCheckEx($node, $s, false);
         }
+        else if ($func == 'CollisionCheckEx') {
+            return static::snippetCollisionCheckEx($node, $s, true);
+        }
         else if ($func == 'BreakLoopEx') {
             return static::snippetBreakLoopEx($node, $s);
         }
@@ -661,18 +664,21 @@ Class AstDecoder {
         $param2 = $s0->nodes[2]->text;//ScoreB
         $param3 = $s0->nodes[3]->text;//TrackB
 
+        if ($param0 === '0') {
+            $p1 = $param1;
+        } else {
+            $p1 = $param0 .':'. $param1;
+        }
+        if ($param2 === '0') {
+            $p2 = $param3;
+        } else {
+            $p2 = $param2 .':'. $param3;
+        }
         if (!$isEx) {
-            if ($param0 === '0') {
-                $p1 = $param1;
-            } else {
-                $p1 = $param0 .':'. $param1;
-            }
-            if ($param2 === '0') {
-                $p2 = $param3;
-            } else {
-                $p2 = $param2 .':'. $param3;
-            }
             $text = 'CollisionCheck('. $p1 .', '. $p2 .')';
+        } else {
+            $param4 = $s0->nodes[4]->text;//Type
+            $text = 'CollisionCheckEx('. $p1 .', '. $p2 .', '. $param4 .')';
         }
         
         return static::snippet_calls_final($node, $text);
