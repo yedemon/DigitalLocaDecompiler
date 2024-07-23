@@ -53,8 +53,19 @@ class ScriptMain {
     /** TrackProperty */
     const TrackProp = 0x70;
 
+    const LocalToWorld = 0x77;
+
+    const CameraToScreenVector = 0x7A;
+
+    const LocalToWorldVector = 0x7B;
+
+    const CameraToScreenVectorEx = 0x7E;
+
     /** ModelCast */
     const ModelCast = 0x80;
+
+    /** TextCast */
+    const TextCast = 0x83;
 
     /** WaveCast */
     const WaveCast = 0x84;
@@ -142,8 +153,28 @@ class ScriptMain {
                 $node = ScriptTrackProp::digest($root, $bytes, $offset);
                 break;
 
+            case self::CameraToScreenVector:
+                $node = static::digestCameraToScreenVectorEx(0x7A, $root, $bytes, $offset);
+                break;
+
+            case self::LocalToWorld:
+                $node = static::digestLocalToWorld($root, $bytes, $offset);
+                break;
+                
+            case self::CameraToScreenVectorEx:
+                $node = static::digestCameraToScreenVectorEx(0x7E, $root, $bytes, $offset);
+                break;
+
+            case self::LocalToWorldVector:
+                $node = static::digestLocalToWorldVector($root, $bytes, $offset);
+                break;
+
             case self::ModelCast:
                 $node = ScriptModelCast::digest($root, $bytes, $offset);
+                break;
+
+            case self::TextCast:
+                $node = ScriptTextCast::digest($root, $bytes, $offset);
                 break;
 
             case self::WaveCast:
@@ -162,10 +193,6 @@ class ScriptMain {
                 $node = static::digestXA6Cast($root, $bytes, $offset);
                 break;
         }
-
-        // if (!isset($node)) {
-        //     $d = 1;
-        // }
 
         return $node;
     }
@@ -215,6 +242,62 @@ class ScriptMain {
             $node = AstFactory::assignNode($propNode, $v23);
         }
 
+        return $node;
+    }
+
+    private static function digestCameraToScreenVectorEx($cmd, AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+        if ($cmd == self::CameraToScreenVector) {
+        } else {
+            $params[] = EvalSystem::digest($root, $bytes, $offset); // Viewport
+        }
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //SX
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //SY
+
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //VX
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //VY
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //VZ
+
+        if ($cmd == self::CameraToScreenVector) {
+            $node = AstFactory::syscallNode('CameraToScreenVector', $params, self::CameraToScreenVector);
+        } else {
+            $node = AstFactory::syscallNode('CameraToScreenVectorEx', $params, self::CameraToScreenVectorEx);
+        }
+
+        return $node;
+    }
+
+    private static function digestLocalToWorld(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Score
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Track
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LX
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LY
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LZ
+
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WX
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WY
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WZ
+
+        $node = AstFactory::syscallNode('LocalToWorld', $params, self::LocalToWorld);
+        return $node;
+    }
+
+    private static function digestLocalToWorldVector(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Score
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Track
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LX
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LY
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //LZ
+
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WX
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WY
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //WZ
+
+        $node = AstFactory::syscallNode('LocalToWorldVector', $params, self::LocalToWorldVector);
         return $node;
     }
 }

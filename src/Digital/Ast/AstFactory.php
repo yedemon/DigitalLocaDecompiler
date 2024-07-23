@@ -337,6 +337,10 @@ Class AstFactory {
         return static::objectNode('ModelCast', 0x80);
     }
 
+    public static function TextCastNode() : AstNode {
+        return static::objectNode('TextCast', 0x83);
+    }
+
     public static function WaveCastNode() : AstNode {
         return static::objectNode('WaveCast', 0x84);
     }

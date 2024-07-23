@@ -22,6 +22,10 @@ class ScriptCast {
     /** GetCrossPoint */
     const GetCrossPoint = 0x72;
 
+    const WorldToScreen = 0x74;
+
+    const WorldToScreenEx = 0x7D;
+
     /** CollisionCheckEx */
     const CollisionCheckEx = 0x76;
 
@@ -48,6 +52,14 @@ class ScriptCast {
 
             case self::GetCrossPoint:
                 $node = static::digestGetCrossPoint(0x72, $root, $bytes, $offset);
+                break;
+
+            case self::WorldToScreen:
+                $node = static::digestWorldToScreenEx(0x74, $root, $bytes, $offset);
+                break;
+
+            case self::WorldToScreenEx:
+                $node = static::digestWorldToScreenEx(0x7D, $root, $bytes, $offset);
                 break;
 
             case self::CollisionCheckEx:
@@ -127,6 +139,30 @@ class ScriptCast {
         $params[] = EvalSystem::digest($root, $bytes, $offset);
 
         $node = AstFactory::syscallNode('CollisionCheckEx', $params, self::CollisionCheckEx);
+        return $node;
+    }
+
+    private static function digestWorldToScreenEx($cmd, AstRoot $root, $bytes, &$offset) {
+        $params = [];
+        if ($cmd == self::WorldToScreen) {
+        } else {
+            $params[] = EvalSystem::digest($root, $bytes, $offset);
+        }
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //WX
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //WY
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //WZ
+
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //SX
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //SY
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset); //SZ float
+
+        if ($cmd == self::WorldToScreen) {
+            $node = AstFactory::syscallNode('WorldToScreen', $params, self::WorldToScreen);
+        } else {
+            $node = AstFactory::syscallNode('WorldToScreenEx', $params, self::WorldToScreenEx);
+        }
+
         return $node;
     }
 }
