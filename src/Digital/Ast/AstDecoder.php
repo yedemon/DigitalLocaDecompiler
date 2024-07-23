@@ -267,6 +267,9 @@ Class AstDecoder {
             case AstFactory::Bindexer:
                 $snippet = static::snippetBindexer($node, $results);
                 break;
+            case AstFactory::ScoreTrack:
+                $snippet = static::snippetScoreTrack($node, $results);
+                break;
 
             case AstFactory::Subobject:
                 $subname = empty($node->name) ? $node->pcode : $node->name;
@@ -421,6 +424,21 @@ Class AstDecoder {
             return $snippet;
         } else {
             throw new Exception('Bindexer takes 3 snippets..');
+        }
+    }
+
+    /**
+     * @param AstNode $node
+     * @param ScriptSnippet[] $s
+     */
+    private static function snippetScoreTrack($node, $s) : ScriptSnippet {
+        if (count($s) == 2) {
+            $snippet = new ScriptSnippet($s[0]->text . ':' . $s[1]->text);
+            $snippet->valtype = VT_UNK;
+            $snippet->tag = '<S>';
+            return $snippet;
+        } else {
+            throw new Exception('ScoreTrack takes 2 snippets..');
         }
     }
     

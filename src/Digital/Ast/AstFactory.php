@@ -23,6 +23,7 @@ Class AstFactory {
     const ParamRef = 'ref';
     const ParamVal = 'val';
     const UserCall = 'usercall';
+    const ScoreTrack = 'scoretrack';
 
     // const _UserCall = '_usercall';
     const SysCall = 'syscall';
@@ -62,6 +63,8 @@ Class AstFactory {
     const OBJ_CameraCast = 'CameraCast';
     const OBJ_LightCast = 'LightCast';
     const OBJ_AVIFile = 'AVIFile';
+
+    const OBJ_Viewport = 'Viewport';
 
     /**
      * Please pretend you do not see this..
@@ -357,6 +360,10 @@ Class AstFactory {
         return static::objectNode('AVIFile', 0x59);
     }
 
+    public static function ViewportinfoNode() : AstNode {
+        return static::objectNode('Viewportinfo', 0xA6);
+    }
+
     public static function subobjNode(AstNode $object, $subobjname, int $pcode=0, 
                                         int $valType=PCodeReader::VAL_UNKNOWN): AstNode {
         $node = new AstNode();
@@ -397,6 +404,22 @@ Class AstFactory {
         
         $node->nodes[] = $index2;
         static::markIndexerValType($index2);
+
+        return $node;
+    }
+
+    /**
+     * bindexer no hontai.. koledesu..
+     */
+    public static function scoreTrackNode(Astnode $score, AstNode $track) : AstNode {
+        $node = new AstNode();
+        $node->type2 = self::ScoreTrack;
+
+        $node->nodes[] = $score;
+        static::markIndexerValType($score);
+        
+        $node->nodes[] = $track;
+        static::markIndexerValType($track);
 
         return $node;
     }
@@ -560,6 +583,7 @@ Class AstFactory {
     }
 
     /**
+     * @deprecated will use ScoreTrack
      * check node is Bindexer and which index is Literal，send the node through callback.
      */
     public static function markBindexerAlias(AstNode $node, $callback) {

@@ -46,7 +46,7 @@ class ScriptSnippet {
      */
     public function operant() {
         if ($this->tag == '<V>' || $this->tag == '<L>' || $this->tag == '<W>'
-             || $this->tag == '<P>' || $this->tag == '<I>') {
+             || $this->tag == '<P>' || $this->tag == '<I>' || $this->tag == '<S>') {
             return $this->text;
         }
 
