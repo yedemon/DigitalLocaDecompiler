@@ -68,6 +68,8 @@ class EvalSystem {
     /** + */
     const ADD_FLOAT = 0x27;
 
+    const ADD_STRING = 0x28;
+
     /** - */
     const SUB_INT = 0x29;
 
@@ -240,6 +242,8 @@ class EvalSystem {
             case self::X25:
                 $op = 'X25';
                 break;
+            case self::ADD_STRING:
+                $op = 'StrAdd';
         }
 
         return $op;
@@ -306,6 +310,7 @@ class EvalSystem {
 
                 case self::X24:
                 case self::X25:
+                case self::ADD_STRING:
                     if (count($node_queue) <2 ) {
                         throw new Exception($op.' less than 2 operants at '. $offset);
                     }

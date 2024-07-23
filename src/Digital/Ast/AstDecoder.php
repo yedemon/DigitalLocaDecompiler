@@ -883,6 +883,11 @@ Class AstDecoder {
                     $retext = $s[0]->operant() . ' ror ' . $s[1]->operant();
                     $valType = VT_INT;
                     break;
+
+                case EvalSystem::ADD_STRING:
+                    $retext = $s[0]->operant() . '.Add(\'' . $s[1]->operant().'\')';
+                    $valType = VT_INT;
+                    break;
             }
             $snippet = new ScriptSnippet($retext);
             if ($nowrap)
