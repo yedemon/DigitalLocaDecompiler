@@ -89,7 +89,11 @@ class ScriptViewport {
         }
 
         $prop = d_u1($bytes, $offset);
-        $propNode = AstFactory::propNode($obj_idxr, $prop);
+
+        $propname = self::names[$prop]??''; 
+        $propValType = self::valTypes[$prop]??PCodeReader::VAL_UNKNOWN;
+
+        $propNode = AstFactory::propNode($obj_idxr, $prop, $propname, $propValType);
 
         if ($prop == 0x10) {
             $score = EvalSystem::digest($root, $bytes, $offset);
