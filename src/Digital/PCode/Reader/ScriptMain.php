@@ -10,6 +10,11 @@ use Digital\Ast\AstRoot;
 
 class ScriptMain {
 
+
+    /** WORLDBG */
+    const WorldBG = 0x20; 
+
+
     /**SetFramePerSec */
     const SetFramePerSec = 0x27;
 
@@ -60,11 +65,20 @@ class ScriptMain {
     /** LightCast */
     const LightCast = 0x88;
 
+    /** unknown */
+    const XA6Cast = 0xA6;
+
     public static function digest(AstRoot $root, $bytes, &$offset) : AstNode {
         $cmd = d_u1($bytes, $offset); //upk0('C', substr($bytes, $offset++, 1));
         // $node->cmd = cmdhex($cmd);
 
         switch($cmd) {
+            case self::WorldBG:
+                $params = [];
+                $params[] = EvalSystem::digest($root, $bytes, $offset);
+                $node = AstFactory::syscallNode('WorldBG', $params, self::WorldBG);
+                break;
+
             case self::SetFramePerSec:
                 // $node->op = 'SetFramePerSec';
                 $params = [];
@@ -144,7 +158,14 @@ class ScriptMain {
                 $node = ScriptLightCast::digest($root, $bytes, $offset);
                 break;
 
+            case self::XA6Cast:
+                $node = static::digestXA6Cast($root, $bytes, $offset);
+                break;
         }
+
+        // if (!isset($node)) {
+        //     $d = 1;
+        // }
 
         return $node;
     }
@@ -172,6 +193,28 @@ class ScriptMain {
         $params[] = EvalSystem::digest($root, $bytes, $offset);
         $params[] = EvalSystem::digest($root, $bytes, $offset);    // true?
         $node = AstFactory::syscallNode('SeekFrameEx', $params, self::SeekFrameEx);
+        return $node;
+    }
+
+    private static function digestXA6Cast(AstRoot $root, $bytes, &$offset) : AstNode {
+        $a3 = EvalSystem::digest($root, $bytes, $offset);
+        $prop = d_u1($bytes, $offset);
+        $v23 = EvalSystem::digest($root, $bytes, $offset);
+
+        $obj = AstFactory::objectNode('XA6');
+        $obj_index = AstFactory::indexerNode($obj, $a3);
+        
+        $propNode = AstFactory::propNode($obj_index, $prop);
+
+        // ignore $a3 0 - 3.
+        if ($prop == 0x10) {
+            $x = EvalSystem::digest($root, $bytes, $offset);
+
+            $node = AstFactory::callNode($propNode, 'x10', [$x]);
+        } else {
+            $node = AstFactory::assignNode($propNode, $v23);
+        }
+
         return $node;
     }
 }
