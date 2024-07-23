@@ -25,7 +25,7 @@ try {
     $unknown1 = freadu4($fp);
     $unknown2 = freadu4($fp);
     $version = freadu4($fp);
-    if ($version >= 0x2E) {
+    if ($version >= 0x2E && $version < 0x37) {
         $unknown = freadu1($fp);  // should be 0x88?
     }
 
@@ -43,6 +43,10 @@ try {
 
     $zlib1 = fread($fp, $zlib1_length);
     $zlib1_uncompress = gzuncompress($zlib1);
+
+    if ($version >= 0x37) {
+        $unk_length = freadu4($fp);
+    }
 
     $flag2 = freadu1($fp);  // 0x20
     $zlib2_length = freadu4($fp);
