@@ -391,6 +391,7 @@ Class AstFactory {
     }
 
     /**
+     * @deprecated try to use scoretrack.
      * for double index things like TrackProperty
      */
     public static function bindexerNode(Astnode $object, Astnode $index, AstNode $index2) : AstNode {
@@ -602,7 +603,9 @@ Class AstFactory {
         }
     }
 
-    // SeekFrame dont support mixed labels，e.g. 0:label..
+    /**
+     * SeekFrame dont support mixed labels，e.g. 0:label..
+     */
     public static function markSeekframeAlias(AstNode $node, $callback) {
         if ($node->type2 == self::SysCall) {
             if ($node->name == 'SeekFrameEx') {
@@ -632,6 +635,28 @@ Class AstFactory {
         }
     }
 
+    public static function markScoreTrackAlias(AstNode $node, $callback) {
+        if ($node->type2 == self::ScoreTrack) {
+            $literal = $node->nodes[0]->getLiteralValue();
+            $literal2 = $node->nodes[1]->getLiteralValue();
+            $thisPath = 'ScoreTrack.' . 
+                ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
+
+            $path = [$thisPath];
+            [$alias, $alias2] = $callback($path);
+            if (!empty($alias)) {
+                $node->nodes[0]->alias = $alias;
+            }
+            if (!empty($alias2)) {
+                $node->nodes[1]->alias = $alias2;
+            }
+        }
+    }
+
+
+    /**
+     * @deprecated will use ScoreTrack
+     */
     public static function markGetCrossPointAlias(AstNode $node, $callback) {
         if ($node->type2 == self::SysCall) {
             if ($node->name == 'GetCrossPointEx' || $node->name == 'GetCrossPoint') {
@@ -654,6 +679,9 @@ Class AstFactory {
         }
     }
 
+    /**
+     * @deprecated will use ScoreTrack
+     */
     public static function markCollisionCheckAlias(AstNode $node, $callback) {
         if ($node->type2 == self::SysCall) {
             if ($node->name == 'CollisionCheck' || $node->name == 'CollisionCheckEx') {
@@ -785,23 +813,23 @@ Class AstFactory {
             $literalNodes[] = $indexer->nodes[1];
         }
         else if ($obj->type2 == self::Object) {
-            if ($obj->name == self::OBJ_TrackProperty) {
-                // xxx.x:x
-                $literal = $indexer->nodes[1]->getLiteralValue();
-                $literal2 = $indexer->nodes[2]->getLiteralValue();
-                $thisPath = $obj->name . '.' . 
-                        ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
+            // if ($obj->name == self::OBJ_TrackProperty) {
+            //     // xxx.x:x
+            //     $literal = $indexer->nodes[1]->getLiteralValue();
+            //     $literal2 = $indexer->nodes[2]->getLiteralValue();
+            //     $thisPath = $obj->name . '.' . 
+            //             ($literal===null?'?':$literal) . ':' . ($literal2===null?'?':$literal2);
 
-                $literalNodes[] = $indexer->nodes[1];
-                $literalNodes[] = $indexer->nodes[2];
-            }
-            else {
-                // xxx.x
-                $literal = $indexer->nodes[1]->getLiteralValue();
-                $thisPath = $obj->name . '.' . ($literal===null?'?':$literal);
+            //     $literalNodes[] = $indexer->nodes[1];
+            //     $literalNodes[] = $indexer->nodes[2];
+            // }
+            // else {
+            // xxx.x
+            $literal = $indexer->nodes[1]->getLiteralValue();
+            $thisPath = $obj->name . '.' . ($literal===null?'?':$literal);
 
-                $literalNodes[] = $indexer->nodes[1];
-            }
+            $literalNodes[] = $indexer->nodes[1];
+            // }
             $parentPath = [$thisPath];
         } else {
             return [];

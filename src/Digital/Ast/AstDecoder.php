@@ -433,7 +433,13 @@ Class AstDecoder {
      */
     private static function snippetScoreTrack($node, $s) : ScriptSnippet {
         if (count($s) == 2) {
-            $snippet = new ScriptSnippet($s[0]->text . ':' . $s[1]->text);
+            if ($s[0]->text === '0') {
+                $text = $s[1]->text;
+            } else {         
+                $text = $s[0]->text .':'. $s[1]->text;
+            }
+            // $snippet = new ScriptSnippet($s[0]->text . ':' . $s[1]->text);
+            $snippet = new ScriptSnippet($text);
             $snippet->valtype = VT_UNK;
             $snippet->tag = '<S>';
             return $snippet;
@@ -548,18 +554,18 @@ Class AstDecoder {
             // SeekFrame special handle
             return static::snippetSeekFrameEx($node, $s);
         }
-        else if ($func == 'GetCrossPoint') {
-            return static::snippetGetCrossPointEx($node, $s, false);
-        }
-        else if ($func == 'GetCrossPointEx') {
-            return static::snippetGetCrossPointEx($node, $s, true);
-        }
-        else if ($func == 'CollisionCheck') {
-            return static::snippetCollisionCheckEx($node, $s, false);
-        }
-        else if ($func == 'CollisionCheckEx') {
-            return static::snippetCollisionCheckEx($node, $s, true);
-        }
+        // else if ($func == 'GetCrossPoint') {
+        //     return static::snippetGetCrossPointEx($node, $s, false);
+        // }
+        // else if ($func == 'GetCrossPointEx') {
+        //     return static::snippetGetCrossPointEx($node, $s, true);
+        // }
+        // else if ($func == 'CollisionCheck') {
+        //     return static::snippetCollisionCheckEx($node, $s, false);
+        // }
+        // else if ($func == 'CollisionCheckEx') {
+        //     return static::snippetCollisionCheckEx($node, $s, true);
+        // }
         else if ($func == 'BreakLoopEx') {
             return static::snippetBreakLoopEx($node, $s);
         }

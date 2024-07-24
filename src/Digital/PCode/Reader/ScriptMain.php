@@ -249,8 +249,10 @@ class ScriptMain {
     private static function digestLocalToWorld(AstRoot $root, $bytes, &$offset) : AstNode {
         $params = [];
 
-        $params[] = EvalSystem::digest($root, $bytes, $offset); //Score
-        $params[] = EvalSystem::digest($root, $bytes, $offset); //Track
+        $score = EvalSystem::digest($root, $bytes, $offset); //Score
+        $track = EvalSystem::digest($root, $bytes, $offset); //Track
+        $params[] = AstFactory::scoreTrackNode($score, $track);
+
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LX
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LY
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LZ
@@ -266,8 +268,10 @@ class ScriptMain {
     private static function digestLocalToWorldVector(AstRoot $root, $bytes, &$offset) : AstNode {
         $params = [];
 
-        $params[] = EvalSystem::digest($root, $bytes, $offset); //Score
-        $params[] = EvalSystem::digest($root, $bytes, $offset); //Track
+        $score = EvalSystem::digest($root, $bytes, $offset); //Score
+        $track = EvalSystem::digest($root, $bytes, $offset); //Track
+        $params[] = AstFactory::scoreTrackNode($score, $track);
+
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LX
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LY
         $params[] = EvalSystem::digest($root, $bytes, $offset); //LZ

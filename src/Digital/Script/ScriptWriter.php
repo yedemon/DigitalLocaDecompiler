@@ -149,9 +149,15 @@ class ScriptWriter {
                     return $name;
                 });
 
-                AstFactory::markBindexerAlias($node, 
+                // AstFactory::markBindexerAlias($node, 
+                // function($path) use ($loca) {
+                //     // TODO: handle ?
+                //     [$name, $name2] = $loca->searchScoreTrack($path);
+                //     return [$name, $name2];
+                // });
+                                
+                AstFactory::markScoreTrackAlias($node,
                 function($path) use ($loca) {
-                    // TODO: handle ?
                     [$name, $name2] = $loca->searchScoreTrack($path);
                     return [$name, $name2];
                 });
@@ -163,17 +169,17 @@ class ScriptWriter {
                     return [$name, $name2];
                 });
 
-                AstFactory::markGetCrossPointAlias($node,
-                function($path) use ($loca) {
-                    [$name, $name2] = $loca->searchScoreTrack($path);
-                    return [$name, $name2];
-                });
+                // AstFactory::markGetCrossPointAlias($node,
+                // function($path) use ($loca) {
+                //     [$name, $name2] = $loca->searchScoreTrack($path);
+                //     return [$name, $name2];
+                // });
 
-                AstFactory::markCollisionCheckAlias($node,
-                function($path) use ($loca) {
-                    [$name, $name2] = $loca->searchScoreTrack($path);
-                    return [$name, $name2];
-                });
+                // AstFactory::markCollisionCheckAlias($node,
+                // function($path) use ($loca) {
+                //     [$name, $name2] = $loca->searchScoreTrack($path);
+                //     return [$name, $name2];
+                // });
 
                 AstFactory::markBreakLoopExAlias($node,
                 function($path) use ($loca) {

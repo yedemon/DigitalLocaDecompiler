@@ -178,9 +178,13 @@ class ScriptTrackProp {
 
         // $node->nodes[] = EvalSystem::digest($root, $bytes, $offset);
         // $node->nodes[] = EvalSystem::digest($root, $bytes, $offset);
-        $obj_index1 = EvalSystem::digest($root, $bytes, $offset);
-        $obj_index2 = EvalSystem::digest($root, $bytes, $offset);
-        $obj_idxr = AstFactory::bindexerNode($obj, $obj_index1, $obj_index2);
+        // $obj_index1 = EvalSystem::digest($root, $bytes, $offset);
+        // $obj_index2 = EvalSystem::digest($root, $bytes, $offset);
+        // $obj_idxr = AstFactory::bindexerNode($obj, $obj_index1, $obj_index2);
+        $score = EvalSystem::digest($root, $bytes, $offset);
+        $track = EvalSystem::digest($root, $bytes, $offset);
+        $obj_index = AstFactory::scoreTrackNode($score, $track);
+        $obj_idxr = AstFactory::indexerNode($obj, $obj_index);
 
         $prop = d_u1($bytes, $offset);
 

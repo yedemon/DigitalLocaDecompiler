@@ -95,8 +95,9 @@ class ScriptCast {
         $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);
         
         //??    sub_489E80*6
-        $params[] = EvalSystem::digest($root, $bytes, $offset);//score
-        $params[] = EvalSystem::digest($root, $bytes, $offset);//track
+        $score = EvalSystem::digest($root, $bytes, $offset);//score
+        $track = EvalSystem::digest($root, $bytes, $offset);//track
+        $params[] = AstFactory::scoreTrackNode($score, $track);
         $params[] = EvalSystem::digest($root, $bytes, $offset);//flag
 
         // gettrack...
@@ -118,10 +119,12 @@ class ScriptCast {
         // $node->op = 'CollisionCheck';
         $params = [];
 
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
+        $scoreA = EvalSystem::digest($root, $bytes, $offset);
+        $trackA = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreA, $trackA);
+        $scoreB = EvalSystem::digest($root, $bytes, $offset);
+        $trackB = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreB, $trackB);
 
         $node = AstFactory::syscallNode('CollisionCheck', $params, self::CollisionCheck);
         return $node;
@@ -131,10 +134,12 @@ class ScriptCast {
         // $node->op = 'CollisionCheck';
         $params = [];
 
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
-        $params[] = EvalSystem::digest($root, $bytes, $offset);
+        $scoreA = EvalSystem::digest($root, $bytes, $offset);
+        $trackA = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreA, $trackA);
+        $scoreB = EvalSystem::digest($root, $bytes, $offset);
+        $trackB = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreB, $trackB);
 
         $params[] = EvalSystem::digest($root, $bytes, $offset);
 
