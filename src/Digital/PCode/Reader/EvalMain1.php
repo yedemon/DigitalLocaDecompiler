@@ -223,7 +223,7 @@ class EvalMain1 {
                 break;
 
             default:
-                throw new Exception('unknown cmd at '.$offset. ' name ' . $root->getName());
+                throw new Exception('unknown cmd '. dechex($cmd) .' at '.$offset. ' name ' . $root->getName());
                 // break;
         }
 
