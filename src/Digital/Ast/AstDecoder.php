@@ -909,8 +909,8 @@ Class AstDecoder {
                     break;
 
                 case EvalSystem::ADD_STRING:
-                    $retext = $s[0]->operant() . '.Add(\'' . $s[1]->operant().'\')';
-                    $valType = VT_INT;
+                    $retext = static::toStrWrap($s[0]) . ' + ' . static::toStrWrap($s[1]);
+                    $valType = VT_STRING;
                     break;
             }
             $snippet = new ScriptSnippet($retext);
@@ -958,5 +958,20 @@ Class AstDecoder {
                 break;
         }
         return $ret;
+    }
+
+    private static function toStrWrap(ScriptSnippet $snippet) : string {
+        if (!isset($snippet->valtype)) {
+            return $snippet->operant();
+        }
+        if ($snippet->valtype == VT_BOOL) {
+            return 'BoolToStr('. $snippet->operant() .')';
+        } else if ($snippet->valtype == VT_INT) {
+            return 'IntToStr('. $snippet->operant() .')';
+        } else if ($snippet->valtype == VT_FLOAT) {
+            return 'FloatToStr(' . $snippet->operant() . ')';
+        }
+
+        return $snippet->operant();
     }
 }
