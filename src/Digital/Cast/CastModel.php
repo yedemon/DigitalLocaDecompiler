@@ -61,6 +61,12 @@ Class CastModel {
                     }
                     break;
 
+                case 0x15:
+                case 0x2E:
+                case 0xBF:
+                    $v22 = freadu4($fp);
+                    break;
+
                 case 0x16:
                     freadsafe($fp, $a1F34_1); break;
                 case 0x17:
@@ -68,6 +74,21 @@ Class CastModel {
                 case 0x18:
                     $v4_63 = freadu4($fp);
                     freadsafe($fp, $v4_63);
+                    break;
+
+                case 0x19:
+                    static::fread_49FC38($fp);
+                    static::fread_49FC38($fp);
+                    static::fread_49FBF8($fp);
+                    break;
+                case 0x1A:
+                    static::fread_49FC38($fp);
+                    static::fread_49FC38($fp);
+                    static::fread_49FBF8($fp);
+                    break;
+                case 0x1B:
+                    $v22 = freadu4($fp);
+                    freadsafe($fp, $v22);
                     break;
 
                 case 0x20:
@@ -112,13 +133,13 @@ Class CastModel {
                 case 0x70:
                     fread($fp, 4); break;
                 case 0x71:
-                    fread($fp, 12); break;
+                    static::fread_49FC38($fp); break;
                 case 0x72:
                     fread($fp, 4); break;
                 case 0x73:
                     fread($fp, 24); break;
                 case 0x74:
-                    fread($fp, 12); break;
+                    static::fread_49FC38($fp); break;
                 case 0x80:
                     fread($fp, 4); break;
                 case 0x81:
@@ -209,5 +230,13 @@ Class CastModel {
 
         $body[self::GROUP] = $group;
         return $body;
+    }
+
+    private static function fread_49FC38($fp) : string {
+        return fread($fp, 12);
+    }
+
+    private static function fread_49FBF8($fp) : string {
+        return fread($fp, 4);
     }
 }
