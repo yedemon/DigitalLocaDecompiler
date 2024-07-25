@@ -59,6 +59,8 @@ Class AstFactory {
     const OBJ_TrackProperty = 'TrackProperty';
     const OBJ_JoyStick = 'JoyStick';
     const OBJ_ModelCast = 'ModelCast';
+    const OBJ_TextureCast = 'TextureCast';
+    const OBJ_BitmapCast = 'BitmapCast';
     const OBJ_WaveCast = 'WaveCast';
     const OBJ_CameraCast = 'CameraCast';
     const OBJ_LightCast = 'LightCast';
@@ -338,6 +340,14 @@ Class AstFactory {
 
     public static function ModelCastNode() : AstNode {
         return static::objectNode('ModelCast', 0x80);
+    }
+
+    public static function TextureCastNode() : AstNode {
+        return static::objectNode('TextureCast', 0x81);
+    }
+
+    public static function BitmapCastNode() : AstNode {
+        return static::objectNode('BitmapCast', 0x82);
     }
 
     public static function TextCastNode() : AstNode {

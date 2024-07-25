@@ -64,6 +64,12 @@ class ScriptMain {
     /** ModelCast */
     const ModelCast = 0x80;
 
+    /** TextureCast */
+    const TextureCast = 0x81;
+
+    /** BitmapCast */
+    const BitmapCast = 0x82;
+
     /** TextCast */
     const TextCast = 0x83;
 
@@ -171,6 +177,14 @@ class ScriptMain {
 
             case self::ModelCast:
                 $node = ScriptModelCast::digest($root, $bytes, $offset);
+                break;
+            
+            case self::TextureCast:
+                $node = (new ScriptTextureCast())->digest($root, $bytes, $offset);
+                break;
+
+            case self::BitmapCast:
+                $node = (new ScriptBitmapCast())->digest($root, $bytes, $offset);
                 break;
 
             case self::TextCast:
