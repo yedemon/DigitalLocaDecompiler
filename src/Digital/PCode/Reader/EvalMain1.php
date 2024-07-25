@@ -83,9 +83,15 @@ class EvalMain1 {
     
     /** GetClientCursorPos */
     const GCCP = 0x55;
+    
+    /** GetScreenCursorPos */
+    const GSCP = 0x56;
 
     /** SetClientCursorPos */
     const SCCP = 0x57;
+    
+    /** SetScreenCursorPos */
+    const SSCP = 0x58;
 
     /** Randomize */
     const Randomize = 0x70;
@@ -210,8 +216,16 @@ class EvalMain1 {
                 $node = static::digestGCCP($root, $bytes, $offset);
                 break;
 
+            case self::GSCP:
+                $node = static::digestGSCP($root, $bytes, $offset);
+                break;
+
             case self::SCCP:
                 $node = static::digestSCCP($root, $bytes, $offset);
+                break;
+
+            case self::SSCP:
+                $node = static::digestSSCP($root, $bytes, $offset);
                 break;
 
             case self::Randomize:
@@ -508,13 +522,29 @@ class EvalMain1 {
         return $node;
     }
 
+    private static function digestGSCP(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //x
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //y
+        $node = AstFactory::syscallNode('GetScreenCursorPos', $params, self::GSCP);
+
+        return $node;
+    }
+
     private static function digestSCCP(AstRoot $root, $bytes, &$offset) : AstNode {
         $params = [];
-        // $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //x
-        // $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //y
         $params[] = EvalSystem::digest($root, $bytes, $offset);  //x
         $params[] = EvalSystem::digest($root, $bytes, $offset);  //y
         $node = AstFactory::syscallNode('SetClientCursorPos', $params, self::SCCP);
+
+        return $node;
+    }
+
+    private static function digestSSCP(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //x
+        $params[] = EvalCommon::digest489CF8($root, $bytes, $offset);  //y
+        $node = AstFactory::syscallNode('SetScreenCursorPos', $params, self::SSCP);
 
         return $node;
     }
