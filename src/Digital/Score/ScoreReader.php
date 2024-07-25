@@ -95,15 +95,34 @@ Class ScoreReader {
                 case 0x32:
                     $track[0x32] = fread4($fp); break;
 
-                case 0x40:
-                    $track[0x40] = freadstr($fp); break;
-
                 case 0x34:
                     $track[0x34] = fread4($fp); break;
                 case 0x35:
                     $track[0x35] = fread4($fp); break;
+
+                case 0x40:
+                    $track[0x40] = freadstr($fp); break;
+
+                case 0x41:
+                    $track[0x41] = fread4($fp); break;
                 case 0x42:
                     $track[0x42] = fread($fp, 64); break;
+
+                case 0x50:
+                    $track[0x50] = freadu1($fp); break;
+                case 0x51:
+                    $track[0x51] = freadu1($fp); break;
+                case 0x52:
+                    $track[0x52] = freadu1($fp); break;
+
+                case 0x53:
+                    // create TNZTransArray
+                    break;
+
+                case 0x54:
+                    $track[0x54] = freadu1($fp);
+                    $track['0x54_str'] = freadstr($fp); // don't known this.
+                    break;
 
                 case 0xFF:
                     $loop = false;

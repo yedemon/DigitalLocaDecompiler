@@ -179,17 +179,17 @@ Class DigiLoca extends DigiLocaResource {
                 $this->x10_offset = ftell($fp) - 1;
                 $rawcasts = DigiLocaReader::readX10($fp);
                 $this->x10_length = ftell($fp) - $this->x10_offset;
-                if ($this->version >= self::DL_VERSION3) {
-                    $unknown = freadu1($fp);  // should be 0x8A?
-                }
+                // if ($this->version >= self::DL_VERSION3) {
+                //     $unknown = freadu1($fp);  // should be 0x8A?
+                // }
             }
             else if ($flag == 0x20) {
                 $this->x20_offset = ftell($fp) - 1;
                 $rawscores = DigiLocaReader::readX20($fp);
                 $this->x20_length = ftell($fp) - $this->x20_offset;
-                if ($this->version >= self::DL_VERSION3) {
-                    $unknown = freadu1($fp);  // should be 0x8B?
-                }
+                // if ($this->version >= self::DL_VERSION3) {
+                //     $unknown = freadu1($fp);  // should be 0x8B?
+                // }
             }
             else if ($flag == 0x30) {
                 $this->x30_offset = ftell($fp) - 1;
@@ -201,10 +201,25 @@ Class DigiLoca extends DigiLocaResource {
                 $loop = false;
                 break;
             }
+            // they add many flags after Version 0x2B..
+            else if ($flag == 0xF1) {
+                $str_f1 = freadstr($fp);
+            }
+            else if ($flag > 0x93 && $flag <= 0xED) {
+                // 0x93 read nothing.
+                $unk_93_ed = freadu4($fp);
+            }
+            else if ($flag >= 0x88 && $flag <= 0x92) {
+                // seems read nothing..
+                // but 0x88,0x89,0x8A,0x8B are some flags.
+            }
+            else if ($flag == 0x18) {
+                throw new Exception('0x18 appares at scanFile..');
+            }
             else {
                 // don't know what it is..
                 // appear at LD_VERSION3..
-                $unknown = fread($fp, $flag + 3); //..
+                // $unknown = fread($fp, $flag + 3); //..
             }
         }
 

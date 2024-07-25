@@ -41,7 +41,7 @@ The restored project will be stored in the `R:` drive under a directory named af
 - **Extra.php**: This script is using gzuncompress(), which might be memory consuming. Be sure to raise the memory limit in your php config file(usually php.ini).
 - **Exe File Format**: As for .exe format, you can search the file for the string 'DIGILOCA'. After locating this string, save all the content starting from 'DIGILOCA' as .lcr file.
 - **Disk Drive Requirement**: Ensure you have an `R:` drive or modify the code to use a different drive.
-- **Compatibility**: Currently, the tool is focused on decompiling older versions of `.lcl` files. The compatibility with newer versions is unknown.
+- **Compatibility**: Currently, the tool is focused on decompiling older versions of `.lcl` files, the version of which has already goes upto 0x37. The compatibility with newer versions is unknown.
 - **Incomplete Parameter Types**: Some function parameter types are guessed and might be marked as `:UNK`.
 - **External Resources**: If the `.lcl` file includes external resources, they might not be properly handled or included in the decompiled output.
 - **Key Translation**: `OnEvent` type function keys and `GetKeyState(key)` parameters are not yet translated to `VK_xx` constants.
