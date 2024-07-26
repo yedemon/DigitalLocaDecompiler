@@ -32,6 +32,12 @@ class ScriptCast {
     /** ModelCast */
     const ModelCast = 0x80;
 
+    /** TextureCast */
+    const TextureCast = 0x81;
+
+    /** BitmapCast */
+    const BitmapCast = 0x82;
+
     /** wv */
     const WaveCast = 0x84;
 
@@ -68,6 +74,14 @@ class ScriptCast {
 
             case self::ModelCast:
                 $node = CastModelCast::digest($root, $bytes, $offset);
+                break;
+
+            case self::TextureCast:
+                $node = (new ScriptTextureCast(0))->digest($root, $bytes, $offset);
+                break;
+
+            case self::BitmapCast:
+                $node = (new ScriptBitmapCast(0))->digest($root, $bytes, $offset);
                 break;
 
             case self::WaveCast:

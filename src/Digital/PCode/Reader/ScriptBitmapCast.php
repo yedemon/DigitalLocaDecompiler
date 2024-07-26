@@ -16,4 +16,8 @@ class ScriptBitmapCast extends ScriptTextureCast {
     //     return $node;
     // }
 
+    protected function createObjectNode() : AstNode {
+        return AstFactory::BitmapCastNode();
+    }
+
 }

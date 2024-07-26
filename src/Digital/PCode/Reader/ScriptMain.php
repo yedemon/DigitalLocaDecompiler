@@ -180,11 +180,11 @@ class ScriptMain {
                 break;
             
             case self::TextureCast:
-                $node = (new ScriptTextureCast())->digest($root, $bytes, $offset);
+                $node = (new ScriptTextureCast(1))->digest($root, $bytes, $offset);
                 break;
 
             case self::BitmapCast:
-                $node = (new ScriptBitmapCast())->digest($root, $bytes, $offset);
+                $node = (new ScriptBitmapCast(1))->digest($root, $bytes, $offset);
                 break;
 
             case self::TextCast:
