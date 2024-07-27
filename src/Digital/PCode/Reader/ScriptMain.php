@@ -223,10 +223,6 @@ class ScriptMain {
                 break;
         }
 
-        if (!isset($node)) {
-            $d = 1;
-        }
-
         return $node;
     }
 
