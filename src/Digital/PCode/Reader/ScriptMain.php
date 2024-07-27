@@ -85,6 +85,12 @@ class ScriptMain {
     /** Viewportinfo */
     const Viewportinfo = 0xA6;
 
+    /** ShadowLightOn */
+    const ShadowLightOn = 0xC0;
+
+    /** ShadowLightOff */
+    const ShadowLightOff = 0xC1;
+
     public static function digest(AstRoot $root, $bytes, &$offset) : AstNode {
         $cmd = d_u1($bytes, $offset); //upk0('C', substr($bytes, $offset++, 1));
         // $node->cmd = cmdhex($cmd);
@@ -207,6 +213,18 @@ class ScriptMain {
                 $node = ScriptViewport::digest($root, $bytes, $offset);
                 //static::digestXA6Cast($root, $bytes, $offset);
                 break;
+
+            case self::ShadowLightOn:
+                $node = static::digestShadowLightOn($root, $bytes, $offset);
+                break;
+
+            case self::ShadowLightOff:
+                $node = static::digestShadowLightOff($root, $bytes, $offset);
+                break;
+        }
+
+        if (!isset($node)) {
+            $d = 1;
         }
 
         return $node;
@@ -297,4 +315,41 @@ class ScriptMain {
         $node = AstFactory::syscallNode('LocalToWorldVector', $params, self::LocalToWorldVector);
         return $node;
     }
+
+    private static function digestShadowLightOn(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset);//channel Id.
+        $params[] = EvalSystem::digest($root, $bytes, $offset);//ShadowType
+
+        $scoreA = EvalSystem::digest($root, $bytes, $offset);
+        $trackA = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreA, $trackA);
+        $scoreB = EvalSystem::digest($root, $bytes, $offset);
+        $trackB = EvalSystem::digest($root, $bytes, $offset);
+        $params[] = AstFactory::scoreTrackNode($scoreB, $trackB);
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //R
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //G
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //B
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //X
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Y
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Z
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset); //Darkness
+
+        $node = AstFactory::syscallNode('ShadowLightOn', $params, self::ShadowLightOn);
+        return $node;
+    }
+
+    private static function digestShadowLightOff(AstRoot $root, $bytes, &$offset) : AstNode {
+        $params = [];
+
+        $params[] = EvalSystem::digest($root, $bytes, $offset);//channel Id.
+
+        $node = AstFactory::syscallNode('ShadowLightOff', $params, self::ShadowLightOff);
+        return $node;
+    }
+
 }
