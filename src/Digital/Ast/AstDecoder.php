@@ -12,27 +12,78 @@ use Exception;
  * helps to turn AstNode into Script Snippets
  */
 Class AstDecoder {
+    
+    private static function formatDouble($number) : string {
+        // Check if the number is a float and has no fractional part
+        if (is_float($number) && floor($number) == $number) {
+            return number_format($number, 1, '.', '');
+        }
+        return strval($number);
+    }
 
-    public static function decodeConst(AstNode $node) : ScriptSnippet {
+    private static function literalValByType($val, $valType) : string {
+        switch($valType) {
+            case PCodeReader::VAL_BOOL:
+                $text = $val == 1 ? 'True' : 'False';
+                break;
+            case PCodeReader::VAL_INT:
+                $text = strval($val);
+                break;
+            case PCodeReader::VAL_FLOAT:
+                // $d = _pi();
+                if ($val == pi()) {
+                    $text = 'PI';
+                } else {
+                    $text = static::formatDouble($val);
+                }
+                break;
+            case PCodeReader::VAL_STRING:
+                $text = '\''. str_u2j($val).'\'';
+                break;
+
+            default:
+                throw new Exception('unsupported literal type.');
+        }
+        return $text;
+    }
+
+    public static function decodeConst(AstNode $node, $isLocal=false) : ScriptSnippet {
         // sp:Float = 10;
         // EneBounus_List:Array[Ene_Max] of integer =(100,300,500,700,150,100000);
         if ($node->isArray()) {
-            $vals = implode(', ', $node->_vals);
+            $vals = [];
+            for ($i=0;$i<$node->_vals;$i++) {
+                $vals[] = static::literalValByType($node->_vals[$i], $node->_valType);
+            }
+            $vals = implode(', ', $vals);
             $const = str_u2j($node->name) . ':Array[' . $node->size . '] of ' . $node->getValTypeStr() . ' = (' . $vals . ');';
         } else {
-            $const = str_u2j($node->name) . ':' . $node->getValTypeStr() . ' = ' . $node->val . ';';
+            $const = str_u2j($node->name) . ':' . $node->getValTypeStr() . ' = ' . static::literalValByType($node->val, $node->_valType) . ';';
         }
         
         return new ScriptSnippet($const, true);
     }
 
-    public static function decodeVar(AstNode $node) : ScriptSnippet {
+    public static function decodeVar(AstNode $node, $isLocal=false) : ScriptSnippet {
         // sp_xz:Float;
         // Ene_Pos1:Array[Ene_Count+1] of integer;
-        if ($node->isArray()) {
-            $var = str_u2j($node->name) . ':Array[' . $node->size . '] of ' . $node->getValTypeStr() . ';';
+        if ($isLocal) {
+            if ($node->isArray()) {
+                $var = str_u2j($node->name) . ':Array[' . $node->size . '] of ' . $node->getValTypeStr() . ';';
+            } else {
+                $var = str_u2j($node->name) . ':' . $node->getValTypeStr() . ';';
+            }
         } else {
-            $var = str_u2j($node->name) . ':' . $node->getValTypeStr() . ';';
+            if ($node->isArray()) {
+                $vals = [];
+                for ($i=0;$i<$node->_vals;$i++) {
+                    $vals[] = static::literalValByType($node->_vals[$i], $node->_valType);
+                }
+                $vals = implode(', ', $vals);
+                $var = str_u2j($node->name) . ':Array[' . $node->size . '] of ' . $node->getValTypeStr() . ' = (' . $vals . ');';
+            } else {
+                $var = str_u2j($node->name) . ':' . $node->getValTypeStr() . ' = ' . static::literalValByType($node->val, $node->_valType) . ';';
+            }
         }
 
         return new ScriptSnippet($var, true);
@@ -53,7 +104,7 @@ Class AstDecoder {
                     // sp:Float = 10;
                     // $const = $local->name . ':' . $local->getValTypeStr() . ' = ' . $local->val . ';';
                     // $snippet = new ScriptSnippet($const, true);
-                    $snippet = static::decodeConst($local);
+                    $snippet = static::decodeConst($local, true);
                     $snippets[] = $snippet;
                 }
             }
@@ -62,7 +113,7 @@ Class AstDecoder {
                     // sp_xz:Float;
                     // $var = $local->name . ':' . $local->getValTypeStr() . ';';
                     // $snippet = new ScriptSnippet($var, true);
-                    $snippet = static::decodeVar($local);
+                    $snippet = static::decodeVar($local, true);
                     $snippets[] = $snippet;
                 }
             }
@@ -169,7 +220,7 @@ Class AstDecoder {
                 if (!empty($node->alias)) {
                     $text = str_u2j($node->alias);
                 } else {
-                    switch($node->_valType) {
+                    /*switch($node->_valType) {
                         case PCodeReader::VAL_BOOL:
                             $text = $node->val == 1 ? 'True' : 'False';
                             break;
@@ -190,7 +241,8 @@ Class AstDecoder {
 
                         default:
                             throw new Exception('unsupported literal type.');
-                    }
+                    }*/
+                    $text = static::literalValByType($node->val, $node->_valType);
                 }
                 $snippet = new ScriptSnippet($text);
                 $snippet->tag = '<L>';
@@ -336,14 +388,6 @@ Class AstDecoder {
         }
 
         return $snippet;
-    }
-
-    private static function formatDouble($number) : string {
-        // Check if the number is a float and has no fractional part
-        if (is_float($number) && floor($number) == $number) {
-            return number_format($number, 1, '.', '');
-        }
-        return strval($number);
     }
 
     /**
