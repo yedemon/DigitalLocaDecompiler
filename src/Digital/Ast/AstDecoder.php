@@ -631,6 +631,7 @@ Class AstDecoder {
     }
 
     /**
+     * @deprecated 
      * @param AstNode $node
      * @param ScriptSnippet[] $s
      */
@@ -681,6 +682,11 @@ Class AstDecoder {
         return static::snippet_calls_final($node, $text);
     }
 
+    /**
+     * @deprecated 
+     * @param AstNode $node
+     * @param ScriptSnippet[] $s
+     */
     private static function snippetCollisionCheckEx($node, $s, $isEx) : ScriptSnippet {
         $s0 = $s[0];
         $param0 = $s0->nodes[0]->text;//ScoreA
