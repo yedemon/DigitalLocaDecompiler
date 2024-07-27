@@ -354,7 +354,7 @@ Class DigiLoca extends DigiLocaResource {
      */
     public function playWithPcode(string $pcode_file) {
         $procedureName = '';
-        // $procedureName = '関節制御.ENTERFRAME';
+        $procedureName = 'スクリプト783.EXITFRAME';
         $print_all = false;
         if (empty($procedureName)) {
             $print_all = true;
@@ -393,7 +393,12 @@ Class DigiLoca extends DigiLocaResource {
             }
         };
 
-        $debugger->on_final_iterating = function (AstRoot $root) use ($pcode_offset) {
+        $debugger->on_final_iterating = function (AstRoot $root) use ($pcode_offset, $procedureName) {
+            if (!empty($procedureName)) {
+                if (strcasecmp($root->getScriptName().'.'.$root->getName(), $procedureName) !== 0) {
+                    return;
+                }
+            }
             print($root->getName().' at '.
                 cmdhex($root->getBaseOffset()+$pcode_offset).'-'.PHP_EOL);
             $root->printNodesXML();
