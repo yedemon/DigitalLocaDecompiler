@@ -52,7 +52,7 @@ Class AstDecoder {
         // EneBounus_List:Array[Ene_Max] of integer =(100,300,500,700,150,100000);
         if ($node->isArray()) {
             $vals = [];
-            for ($i=0;$i<$node->_vals;$i++) {
+            for ($i=0;$i<$node->size;$i++) {
                 $vals[] = static::literalValByType($node->_vals[$i], $node->_valType);
             }
             $vals = implode(', ', $vals);
@@ -76,7 +76,7 @@ Class AstDecoder {
         } else {
             if ($node->isArray()) {
                 $vals = [];
-                for ($i=0;$i<$node->_vals;$i++) {
+                for ($i=0;$i<$node->size;$i++) {
                     $vals[] = static::literalValByType($node->_vals[$i], $node->_valType);
                 }
                 $vals = implode(', ', $vals);
